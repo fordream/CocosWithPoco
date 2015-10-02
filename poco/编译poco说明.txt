@@ -1,0 +1,54 @@
+#Android平台
+
+#make android
+./configure --config=Android --no-samples --no-tests
+make -s -j4 ANDROID_ABI=armeabi-v7a
+
+
+
+
+#Mac/IOS平台
+
+编译器应设置为Xcode自带的编译器。修改编译器的方法是：用文本编辑器打开需要修改的config文件，例如poco/build/config/iPhone，将原来的CC与CXX修改为Xcode自带的编译器的路径，例如：
+
+　　CC  =/Applications/XCode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+
+　　CXX =/Applications/XCode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
+
+#make armv7
+./configure --config=iPhone-clang-libc++ --no-tests --no-samples
+make IPHONE_SDK_VERSION_MIN=6.0 POCO_TARGET_OSARCH=armv7
+
+#make armv7s
+./configure --config=iPhone-clang-libc++ --no-tests --no-samples
+make IPHONE_SDK_VERSION_MIN=6.0 POCO_TARGET_OSARCH=armv7s
+
+#make arm64
+./configure --config=iPhone-clang-libc++ --no-tests --no-samples
+make IPHONE_SDK_VERSION_MIN=6.0 POCO_TARGET_OSARCH=arm64
+
+#make iPhoneSimulator
+./configure --config=iPhoneSimulator-clang-libc++ --no-tests --no-samples
+make IPHONE_SDK_VERSION_MIN=6.0 POCO_TARGET_OSARCH=x86_64
+
+#make Darwin64
+./configure --config=Darwin64-clang --no-tests --no-samples
+make IPHONE_SDK_VERSION_MIN=6.0 POCO_TARGET_OSARCH=x86_64
+
+#创建文件夹，用来存放IOS合并后的库文件
+mkdir -p lib/iOSAll
+#合并命令
+lipo -create lib/iPhoneOS/armv7/libPocoFoundation.a lib/iPhoneOS/armv7s/libPocoFoundation.a lib/iPhoneOS/arm64/libPocoFoundation.a -output lib/iOSAll/libPocoFoundation.a
+lipo -create lib/iPhoneOS/armv7/libPocoFoundationd.a lib/iPhoneOS/armv7s/libPocoFoundationd.a lib/iPhoneOS/arm64/libPocoFoundationd.a -output lib/iOSAll/libPocoFoundationd.a
+lipo -create lib/iPhoneOS/armv7/libPocoJSON.a lib/iPhoneOS/armv7s/libPocoJSON.a lib/iPhoneOS/arm64/libPocoJSON.a -output lib/iOSAll/libPocoJSON.a
+lipo -create lib/iPhoneOS/armv7/libPocoJSONd.a lib/iPhoneOS/armv7s/libPocoJSONd.a lib/iPhoneOS/arm64/libPocoJSONd.a -output lib/iOSAll/libPocoJSONd.a
+lipo -create lib/iPhoneOS/armv7/libPocoNet.a lib/iPhoneOS/armv7s/libPocoNet.a lib/iPhoneOS/arm64/libPocoNet.a -output lib/iOSAll/libPocoNet.a
+lipo -create lib/iPhoneOS/armv7/libPocoNetd.a lib/iPhoneOS/armv7s/libPocoNetd.a lib/iPhoneOS/arm64/libPocoNetd.a -output lib/iOSAll/libPocoNetd.a
+lipo -create lib/iPhoneOS/armv7/libPocoUtil.a lib/iPhoneOS/armv7s/libPocoUtil.a lib/iPhoneOS/arm64/libPocoUtil.a -output lib/iOSAll/libPocoUtil.a
+lipo -create lib/iPhoneOS/armv7/libPocoUtild.a lib/iPhoneOS/armv7s/libPocoUtild.a lib/iPhoneOS/arm64/libPocoUtild.a -output lib/iOSAll/libPocoUtild.a
+lipo -create lib/iPhoneOS/armv7/libPocoXML.a lib/iPhoneOS/armv7s/libPocoXML.a lib/iPhoneOS/arm64/libPocoXML.a -output lib/iOSAll/libPocoXML.a
+lipo -create lib/iPhoneOS/armv7/libPocoXMLd.a lib/iPhoneOS/armv7s/libPocoXMLd.a lib/iPhoneOS/arm64/libPocoXMLd.a -output lib/iOSAll/libPocoXMLd.a
+
+
+# lipo -info 需要查看的库文件
+
